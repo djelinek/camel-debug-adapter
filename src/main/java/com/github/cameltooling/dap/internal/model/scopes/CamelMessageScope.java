@@ -27,18 +27,20 @@ import org.eclipse.lsp4j.debug.Variable;
 import com.github.cameltooling.dap.internal.IdUtils;
 import com.github.cameltooling.dap.internal.model.CamelScope;
 import com.github.cameltooling.dap.internal.model.CamelStackFrame;
-import com.github.cameltooling.dap.internal.model.variables.message.MessageBodyCamelVariable;
+import com.github.cameltooling.dap.internal.model.variables.message.MessageBodyVariable;
 import com.github.cameltooling.dap.internal.model.variables.message.MessageExchangePropertiesVariable;
 import com.github.cameltooling.dap.internal.model.variables.message.MessageHeadersVariable;
+import com.github.cameltooling.dap.internal.model.variables.message.MessageExchangeVariablesVariable;
 import com.github.cameltooling.dap.internal.types.EventMessage;
 import com.github.cameltooling.dap.internal.types.UnmarshallerEventMessage;
 
 public class CamelMessageScope extends CamelScope {
 	
 	public static final String NAME = "Message";
-	private MessageBodyCamelVariable messageBody;
-	private MessageHeadersVariable headersVariable;
-	private MessageExchangePropertiesVariable exchangePropertiesVariable;
+	private MessageBodyVariable messageBody;
+	private MessageHeadersVariable headers;
+	private MessageExchangePropertiesVariable exchangeProperties;
+	private MessageExchangeVariablesVariable exchangeVariables;
 
 	public CamelMessageScope(CamelStackFrame stackframe) {
 		super(NAME, stackframe.getName(), IdUtils.getPositiveIntFromHashCode((stackframe.getId()+"@Message@" + stackframe.getName()).hashCode()));
@@ -53,19 +55,24 @@ public class CamelMessageScope extends CamelScope {
 			EventMessage eventMessage = new UnmarshallerEventMessage().getUnmarshalledEventMessage(xml);
 			if(eventMessage != null) {
 				variables.add(createVariable("Exchange ID", eventMessage.getExchangeId()));
-				messageBody = new MessageBodyCamelVariable(getBreakpointId(), eventMessage.getMessage().getBody());
+				messageBody = new MessageBodyVariable(getBreakpointId(), eventMessage.getMessage().getBody());
 				variables.add(messageBody);
-				headersVariable = new MessageHeadersVariable(variablesReference, eventMessage.getMessage().getHeaders(), getBreakpointId());
-				variables.add(headersVariable);
-				exchangePropertiesVariable = new MessageExchangePropertiesVariable(variablesReference, eventMessage.getMessage().getExchangeProperties(), getBreakpointId());
-				variables.add(getExchangePropertiesVariable());
+				headers = new MessageHeadersVariable(variablesReference, eventMessage.getMessage().getHeaders(), getBreakpointId());
+				variables.add(headers);
+				exchangeProperties = new MessageExchangePropertiesVariable(variablesReference, eventMessage.getMessage().getExchangeProperties(), getBreakpointId());
+				variables.add(getExchangeProperties());
+				exchangeVariables = new MessageExchangeVariablesVariable(variablesReference, eventMessage.getMessage().getExchangeVariables(), getBreakpointId());
+				variables.add(getExchangeVariables());
 			}
 		} else {
-			if (headersVariable != null && variablesReference == headersVariable.getVariablesReference()) {
-				variables.addAll(headersVariable.createVariables());
+			if (headers != null && variablesReference == headers.getVariablesReference()) {
+				variables.addAll(headers.createVariables());
 			}
-			if (getExchangePropertiesVariable() != null && variablesReference == getExchangePropertiesVariable().getVariablesReference()) {
-				variables.addAll(getExchangePropertiesVariable().createVariables());
+			if (getExchangeProperties() != null && variablesReference == getExchangeProperties().getVariablesReference()) {
+				variables.addAll(getExchangeProperties().createVariables());
+			}
+			if (getExchangeVariables() != null && variablesReference == getExchangeVariables().getVariablesReference()) {
+				variables.addAll(getExchangeVariables().createVariables());
 			}
 		}
 		return variables;
@@ -83,24 +90,31 @@ public class CamelMessageScope extends CamelScope {
 				throw new UnsupportedOperationException("Not supported");
 			}
 		}
-		if (headersVariable != null) {
-			SetVariableResponse response = headersVariable.setVariableIfInScope(args, debugger);
+		if (headers != null) {
+			SetVariableResponse response = headers.setVariableIfInScope(args, debugger);
 			if (response != null) {
 				return response;
 			}
 		}
-		if (getExchangePropertiesVariable() != null) {
-			return getExchangePropertiesVariable().setVariableIfInScope(args, debugger);
+		if (getExchangeProperties() != null) {
+			return getExchangeProperties().setVariableIfInScope(args, debugger);
+		}
+		if (getExchangeVariables() != null) {
+			return getExchangeVariables().setVariableIfInScope(args, debugger);
 		}
 		return null;
 	}
 
-	public MessageHeadersVariable getHeadersVariable() {
-		return headersVariable;
+	public MessageHeadersVariable getHeaders() {
+		return headers;
 	}
 
-	public MessageExchangePropertiesVariable getExchangePropertiesVariable() {
-		return exchangePropertiesVariable;
+	public MessageExchangePropertiesVariable getExchangeProperties() {
+		return exchangeProperties;
+	}
+
+	public MessageExchangeVariablesVariable getExchangeVariables() {
+		return exchangeVariables;
 	}
 
 }

@@ -14,27 +14,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.github.cameltooling.dap.internal.model.variables.message;
+package com.github.cameltooling.dap.internal.model.variables;
 
 import org.apache.camel.api.management.mbean.ManagedBacklogDebuggerMBean;
+import org.eclipse.lsp4j.debug.Variable;
 
-import com.github.cameltooling.dap.internal.model.variables.CamelVariable;
+public abstract class CamelVariableDAP extends Variable {
 
-public class MessageBodyCamelVariable extends CamelVariable {
-
-	public static final String NAME = "Body";
-	private final String breakpointId;
-
-	public MessageBodyCamelVariable(String breakpointId, String body) {
-		this.breakpointId = breakpointId;
-		setName(NAME);
-		setValue(body);
-	}
-
-	@Override
-	public void updateValue(ManagedBacklogDebuggerMBean debugger, String value) {
-		debugger.setMessageBodyOnBreakpoint(breakpointId, value);
-		setValue(value);
-	}
+	public abstract void updateValue(ManagedBacklogDebuggerMBean backlogDebugger, String value);
 
 }

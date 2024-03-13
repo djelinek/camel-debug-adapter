@@ -18,9 +18,9 @@ package com.github.cameltooling.dap.internal.model.variables.debugger;
 
 import org.apache.camel.api.management.mbean.ManagedBacklogDebuggerMBean;
 
-import com.github.cameltooling.dap.internal.model.variables.CamelVariable;
+import com.github.cameltooling.dap.internal.model.variables.CamelVariableDAP;
 
-public class MaxCharsForBodyCamelVariable extends CamelVariable {
+public class MaxCharsForBodyCamelVariable extends CamelVariableDAP {
 
 	public static final String NAME = "Max chars for body";
 

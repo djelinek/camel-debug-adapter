@@ -48,7 +48,7 @@ import com.github.cameltooling.dap.internal.model.variables.debugger.DebugCounte
 import com.github.cameltooling.dap.internal.model.variables.debugger.FallbackTimeoutCamelVariable;
 import com.github.cameltooling.dap.internal.model.variables.debugger.LoggingLevelCamelVariable;
 import com.github.cameltooling.dap.internal.model.variables.debugger.MaxCharsForBodyCamelVariable;
-import com.github.cameltooling.dap.internal.model.variables.message.MessageBodyCamelVariable;
+import com.github.cameltooling.dap.internal.model.variables.message.MessageBodyVariable;
 import com.github.cameltooling.dap.internal.types.EventMessage;
 import com.github.cameltooling.dap.internal.types.ExchangeProperty;
 import com.github.cameltooling.dap.internal.types.UnmarshallerEventMessage;
@@ -189,7 +189,7 @@ class UpdateDebuggerVariableValueTest extends BaseTest {
 	@Test
 	void updateBody() throws Exception {
 		SetVariableArguments args = new SetVariableArguments();
-		args.setName(MessageBodyCamelVariable.NAME);
+		args.setName(MessageBodyVariable.NAME);
 		args.setValue("an updated body");
 		Scope messageScope = clientProxy.getAllStacksAndVars().get(0).getScopes().stream().filter(scope -> CamelMessageScope.NAME.equals(scope.getName())).findAny().get();
 		args.setVariablesReference(messageScope.getVariablesReference());
@@ -208,7 +208,7 @@ class UpdateDebuggerVariableValueTest extends BaseTest {
 		args.setName("header1");
 		args.setValue("an updated header");
 		CamelMessageScope messageScope = (CamelMessageScope) clientProxy.getAllStacksAndVars().get(0).getScopes().stream().filter(scope -> CamelMessageScope.NAME.equals(scope.getName())).findAny().get();
-		args.setVariablesReference(messageScope.getHeadersVariable().getVariablesReference());
+		args.setVariablesReference(messageScope.getHeaders().getVariablesReference());
 
 		SetVariableResponse response = server.setVariable(args).get();
 
@@ -224,7 +224,7 @@ class UpdateDebuggerVariableValueTest extends BaseTest {
 		args.setName("property1");
 		args.setValue("an updated exchange property");
 		CamelMessageScope messageScope = (CamelMessageScope) clientProxy.getAllStacksAndVars().get(0).getScopes().stream().filter(scope -> CamelMessageScope.NAME.equals(scope.getName())).findAny().get();
-		args.setVariablesReference(messageScope.getExchangePropertiesVariable().getVariablesReference());
+		args.setVariablesReference(messageScope.getExchangeProperties().getVariablesReference());
 
 		SetVariableResponse response = server.setVariable(args).get();
 

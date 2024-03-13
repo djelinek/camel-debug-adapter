@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<launchConfiguration type="org.eclipse.lsp4e.debug.launchType">
+    <booleanAttribute key="org.eclipse.debug.core.ATTR_FORCE_SYSTEM_CONSOLE_ENCODING" value="false"/>
+    <booleanAttribute key="org.eclipse.lsp4e.debug.model.ATTR_CUSTOM_DEBUG_ADAPTER" value="false"/>
+    <booleanAttribute key="org.eclipse.lsp4e.debug.model.ATTR_CUSTOM_LAUNCH_PARAMS" value="false"/>
+    <listAttribute key="org.eclipse.lsp4e.debug.model.ATTR_DSP_ARGS">
+        <listEntry value="-agentlib:jdwp=transport=dt_socket,server=y,suspend=y,address=3000"/>
+        <listEntry value="-jar"/>
+        <listEntry value="&lt;enter-path-to-server&gt;/camel-dap-server/target/camel-dap-server-X.XX.X-SNAPSHOT.jar"/>
+    </listAttribute>
+    <stringAttribute key="org.eclipse.lsp4e.debug.model.ATTR_DSP_CMD" value="java"/>
+    <stringAttribute key="org.eclipse.lsp4e.debug.model.ATTR_DSP_MODE" value="launch server"/>
+    <booleanAttribute key="org.eclipse.lsp4e.debug.model.ATTR_DSP_MONITOR_ADAPTER" value="true"/>
+    <stringAttribute key="org.eclipse.lsp4e.debug.model.ATTR_DSP_PARAM" value="{&#10; &quot;request&quot;: &quot;attach&quot;&#10;}"/>
+    <stringAttribute key="org.eclipse.lsp4e.debug.model.ATTR_DSP_SERVER_HOST" value="127.0.0.1"/>
+    <intAttribute key="org.eclipse.lsp4e.debug.model.ATTR_DSP_SERVER_PORT" value="4711"/>
+</launchConfiguration>

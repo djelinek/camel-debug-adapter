@@ -27,7 +27,7 @@ import org.eclipse.lsp4j.debug.SetVariableResponse;
 import com.github.cameltooling.dap.internal.IdUtils;
 import com.github.cameltooling.dap.internal.model.CamelScope;
 import com.github.cameltooling.dap.internal.model.CamelStackFrame;
-import com.github.cameltooling.dap.internal.model.variables.CamelVariable;
+import com.github.cameltooling.dap.internal.model.variables.CamelVariableDAP;
 import com.github.cameltooling.dap.internal.model.variables.debugger.BodyIncludeFilesCamelVariable;
 import com.github.cameltooling.dap.internal.model.variables.debugger.BodyIncludeStreamsCamelVariable;
 import com.github.cameltooling.dap.internal.model.variables.debugger.DebugCounterCamelVariable;
@@ -38,15 +38,15 @@ import com.github.cameltooling.dap.internal.model.variables.debugger.MaxCharsFor
 public class CamelDebuggerScope extends CamelScope {
 
 	public static final String NAME = "Debugger";
-	private volatile Set<CamelVariable> variables = Collections.unmodifiableSet(new HashSet<>());
+	private volatile Set<CamelVariableDAP> variables = Collections.unmodifiableSet(new HashSet<>());
 
 	public CamelDebuggerScope(CamelStackFrame stackframe) {
 		super(NAME, stackframe.getName(), IdUtils.getPositiveIntFromHashCode((stackframe.getId()+"@Debugger@" + stackframe.getName()).hashCode()));
 	}
 	
-	public Set<CamelVariable> createVariables(int variablesReference, ManagedBacklogDebuggerMBean debugger) {
+	public Set<CamelVariableDAP> createVariables(int variablesReference, ManagedBacklogDebuggerMBean debugger) {
 		if(variablesReference == getVariablesReference()) {
-			final Set<CamelVariable> allVariables = new HashSet<>();
+			final Set<CamelVariableDAP> allVariables = new HashSet<>();
 			allVariables.add(new LoggingLevelCamelVariable(debugger));
 			allVariables.add(new MaxCharsForBodyCamelVariable(debugger));
 			allVariables.add(new DebugCounterCamelVariable(debugger));
@@ -62,7 +62,7 @@ public class CamelDebuggerScope extends CamelScope {
 	@Override
 	public SetVariableResponse setVariableIfInScope(SetVariableArguments args, ManagedBacklogDebuggerMBean backlogDebugger) {
 		if (getVariablesReference() == args.getVariablesReference()) {
-			for (CamelVariable variable : variables) {
+			for (CamelVariableDAP variable : variables) {
 				if(args.getName().equals(variable.getName())) {
 					variable.updateValue(backlogDebugger, args.getValue());
 					SetVariableResponse response = new SetVariableResponse();

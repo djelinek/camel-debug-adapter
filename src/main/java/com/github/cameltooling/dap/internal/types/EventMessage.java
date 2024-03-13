@@ -36,6 +36,7 @@ public class EventMessage implements BacklogTracerEventMessage {
 	private String routeId;
 	private String toNode;
 	private String exchangeId;
+	private String exchangeVariable;
 	private Message message;
 	
 	@XmlElement(name = "uid")
@@ -84,6 +85,14 @@ public class EventMessage implements BacklogTracerEventMessage {
 	}
 	public void setMessage(Message message) {
 		this.message = message;
+	}
+
+	@XmlElement(name = "exchangeVariable")
+	public String getExchangeVariable() {
+		return exchangeVariable;
+	}
+	public void setExchangeVariable(String exchangeVariable) {
+		this.exchangeVariable = exchangeVariable;
 	}
 	
 	@Override

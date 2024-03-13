@@ -18,9 +18,9 @@ package com.github.cameltooling.dap.internal.model.variables.debugger;
 
 import org.apache.camel.api.management.mbean.ManagedBacklogDebuggerMBean;
 
-import com.github.cameltooling.dap.internal.model.variables.CamelVariable;
+import com.github.cameltooling.dap.internal.model.variables.CamelVariableDAP;
 
-public class DebugCounterCamelVariable extends CamelVariable {
+public class DebugCounterCamelVariable extends CamelVariableDAP {
 
 	public static final String NAME = "Debug counter";
 
